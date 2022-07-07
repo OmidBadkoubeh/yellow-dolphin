@@ -1,4 +1,3 @@
-import { IsDate } from 'class-validator';
 import { AfterInsert, AfterUpdate, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 import { Gender } from '../enums/gender.enum';
@@ -20,13 +19,17 @@ export class User {
   @Column()
   password: string;
 
-  @Column()
+  @Column({
+    type: 'enum',
+    enum: Gender,
+    default: Gender.RatherNotSay,
+  })
   gender: Gender;
 
-  @IsDate()
+  @Column()
   createDate: Date;
 
-  @IsDate()
+  @Column()
   updateDate: Date;
 
   @AfterInsert()
