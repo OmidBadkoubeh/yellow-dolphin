@@ -7,6 +7,9 @@ import { LoggerService } from '@/logger/logger.service';
 import { CreateUserDto } from '@/users/dto/create-user.dto';
 import { UsersService } from '@/users/users.service';
 
+import { LoginDto } from './dto/login.dto';
+import { RegisterDto } from './dto/register.dto';
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -15,13 +18,13 @@ export class AuthService {
     private userService: UsersService,
   ) {}
 
-  async login(user: any): Promise<Record<string, any>> {
+  async login(dto: LoginDto): Promise<Record<string, any>> {
     // Validation Flag
     let isOk = false;
 
     // Transform body into DTO
     const userDTO = new CreateUserDto();
-    Object.assign(userDTO, user);
+    Object.assign(userDTO, dto);
 
     // TODO: Refactor this section with try catch block and return error message in the catch block
     // Validate DTO against validate function from class-validator
@@ -35,7 +38,7 @@ export class AuthService {
 
     if (isOk) {
       // Get user information
-      const userDetails = await this.userService.find(user.id);
+      const userDetails = await this.userService.findByPhoneNumber(dto.phoneNumber);
 
       // Check if user exists
       if (userDetails === null) {
@@ -43,14 +46,14 @@ export class AuthService {
       }
 
       // Check if the given password match with saved password
-      const isValid = bcryptjs.compareSync(user.password, userDetails.password);
+      const isValid = bcryptjs.compareSync(dto.password, userDetails.password);
       if (isValid) {
         // Generate JWT token
         return {
           status: 200,
           msg: {
-            email: user.email,
-            access_token: this.jwtService.sign({ email: user.email }),
+            phoneNumber: dto.phoneNumber,
+            access_token: this.jwtService.sign({ id: userDetails.id }),
           },
         };
       } else {
@@ -62,7 +65,7 @@ export class AuthService {
     }
   }
 
-  async register(body: any): Promise<Record<string, any>> {
+  async register(body: RegisterDto): Promise<Record<string, any>> {
     // Validation Flag
     let isOk = false;
 

@@ -34,6 +34,11 @@ export class UsersService {
     return this.userRepository.remove(found);
   }
 
+  async findByPhoneNumber(phoneNumber: string) {
+    const found = await this.userRepository.findOne({ where: { phoneNumber } });
+    return found;
+  }
+
   private async findById(id: string) {
     const found = await this.userRepository.findOne({ where: { id } });
     if (!found) {

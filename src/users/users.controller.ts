@@ -4,7 +4,7 @@ import { UpdateUserDto } from './dto/udpate-user.dto';
 import { UsersService } from './users.service';
 
 @Controller()
-export class UserController {
+export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
   @Get(':id')
