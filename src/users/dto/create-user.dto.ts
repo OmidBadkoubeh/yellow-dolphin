@@ -1,4 +1,5 @@
 import { IsAlpha, IsDate, IsEnum, IsNotEmpty, IsPhoneNumber, MaxLength, MinLength } from 'class-validator';
+
 import { Gender } from '../enums/gender.enum';
 
 export class CreateUserDto {

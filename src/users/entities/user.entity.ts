@@ -1,5 +1,6 @@
 import { IsDate } from 'class-validator';
 import { AfterInsert, AfterUpdate, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+
 import { Gender } from '../enums/gender.enum';
 
 @Entity({ name: 'User' })

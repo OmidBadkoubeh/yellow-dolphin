@@ -4,8 +4,13 @@ module.exports = {
     project: 'tsconfig.json',
     sourceType: 'module',
   },
-  plugins: ['@typescript-eslint/eslint-plugin', 'prettier'],
-  extends: ['plugin:@typescript-eslint/recommended', 'plugin:prettier/recommended'],
+  plugins: ['@typescript-eslint/eslint-plugin', 'prettier', 'simple-import-sort'],
+  extends: [
+    'plugin:@typescript-eslint/recommended',
+    'plugin:prettier/recommended',
+    'plugin:import/recommended',
+    'plugin:import/typescript',
+  ],
   root: true,
   env: {
     node: true,
@@ -20,6 +25,7 @@ module.exports = {
     'linebreak-style': ['error', 'unix'],
     semi: ['error', 'always'],
     'comma-dangle': ['error', 'always-multiline'],
+
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
@@ -68,6 +74,7 @@ module.exports = {
       },
     ],
     '@typescript-eslint/unified-signatures': 'error',
+
     'constructor-super': 'error',
     eqeqeq: ['error', 'smart'],
     'guard-for-in': 'error',
@@ -104,5 +111,20 @@ module.exports = {
       },
     ],
     'use-isnan': 'error',
+
+    'simple-import-sort/imports': 'error',
+    'simple-import-sort/exports': 'error',
   },
+  "settings": {
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"]
+    },
+    "import/resolver": {
+      "typescript": {
+        // always try to resolve types under `<root>@types` directory even it doesn't contain any source code, like `@types/unist`
+        "alwaysTryTypes": true,
+        "project": "<root>/tsconfig.json"
+      }
+    }
+  }
 };

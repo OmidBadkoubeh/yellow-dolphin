@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
-import { TasksService } from './tasks.service';
-import { TasksController } from './tasks.controller';
 import { LoggerModule } from 'src/logger/logger.module';
+
+import { TasksController } from './tasks.controller';
+import { TasksService } from './tasks.service';
 
 @Module({
   imports: [LoggerModule],

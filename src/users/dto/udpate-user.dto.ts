@@ -1,4 +1,5 @@
 import { IsAlpha, IsEnum, IsOptional } from 'class-validator';
+
 import { Gender } from '../enums/gender.enum';
 
 export class UpdateUserDto {
