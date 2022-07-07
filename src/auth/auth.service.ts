@@ -1,17 +1,18 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import bcryptjs from 'bcryptjs';
+import * as bcryptjs from 'bcryptjs';
 import { validate } from 'class-validator';
-import { LoggerService } from 'src/logger/logger.service';
-import { UsersDTO } from 'src/users/dto/create-user.dto';
-import { UsersService } from 'src/users/users.service';
+
+import { LoggerService } from '@/logger/logger.service';
+import { CreateUserDto } from '@/users/dto/create-user.dto';
+import { UsersService } from '@/users/users.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly logger: LoggerService = new Logger(AuthService.name),
     private jwtService: JwtService,
-    private userservice: UsersService,
+    private userService: UsersService,
   ) {}
 
   async login(user: any): Promise<Record<string, any>> {
@@ -19,9 +20,8 @@ export class AuthService {
     let isOk = false;
 
     // Transform body into DTO
-    const userDTO = new UsersDTO();
-    userDTO.email = user.email;
-    userDTO.password = user.password;
+    const userDTO = new CreateUserDto();
+    Object.assign(userDTO, user);
 
     // TODO: Refactor this section with try catch block and return error message in the catch block
     // Validate DTO against validate function from class-validator
@@ -35,10 +35,10 @@ export class AuthService {
 
     if (isOk) {
       // Get user information
-      const userDetails = await this.userservice.findOne(user.email);
+      const userDetails = await this.userService.find(user.id);
 
       // Check if user exists
-      if (userDetails == null) {
+      if (userDetails === null) {
         return { status: 401, msg: { msg: 'Invalid credentials' } };
       }
 
@@ -67,9 +67,8 @@ export class AuthService {
     let isOk = false;
 
     // Transform body into DTO
-    const userDTO = new UsersDTO();
-    userDTO.email = body.email;
-    userDTO.name = body.name;
+    const userDTO = new CreateUserDto();
+    Object.assign(userDTO, body);
     userDTO.password = bcryptjs.hashSync(body.password, 10);
 
     // Validate DTO against validate function from class-validator
@@ -81,7 +80,7 @@ export class AuthService {
       }
     });
     if (isOk) {
-      await this.userservice.create(userDTO).catch((error) => {
+      await this.userService.create(userDTO).catch((error) => {
         this.logger.debug(error.message);
         isOk = false;
       });

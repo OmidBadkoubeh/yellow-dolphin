@@ -11,8 +11,8 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
 
   const config = new DocumentBuilder()
-    .setTitle('prime nestjs')
-    .setDescription('Boilerplate for nestjs')
+    .setTitle('Yellow Dolphin 🐬')
+    .setDescription('Yellow Dolphin Swagger')
     .setVersion('1.0')
     .addTag('api')
     .build();
