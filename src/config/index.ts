@@ -1,7 +1,7 @@
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 import { dbConfig } from './database';
 
-interface iConfig {
+interface IConfig {
   port: number;
   database: PostgresConnectionOptions;
   keys: {
@@ -10,7 +10,7 @@ interface iConfig {
   };
 }
 
-export default (): Partial<iConfig> => ({
+export default (): Partial<IConfig> => ({
   port: parseInt(process.env.PORT, 10) || 3000,
   keys: {
     privateKey: process.env.PRIVATE_KEY.replace(/\\n/gm, '\n'),

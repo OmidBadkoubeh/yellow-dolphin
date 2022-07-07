@@ -1,28 +1,40 @@
-import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
-import { Role } from '../enums/role.enum';
+import { IsDate } from 'class-validator';
+import { AfterInsert, AfterUpdate, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Gender } from '../enums/gender.enum';
 
-@Entity()
-@Unique(['email'])
+@Entity({ name: 'User' })
 export class User {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: string;
 
   @Column()
-  name: string;
+  phoneNumber: string;
 
   @Column()
-  email: string;
+  fullName: string;
+
+  @Column()
+  birthday: Date;
 
   @Column()
   password: string;
 
-  @Column({ default: true })
-  isActive: boolean;
+  @Column()
+  gender: Gender;
 
-  @Column({
-    type: 'enum',
-    enum: Role,
-    default: Role.standard,
-  })
-  roles: Role[];
+  @IsDate()
+  createDate: Date;
+
+  @IsDate()
+  updateDate: Date;
+
+  @AfterInsert()
+  afterInsert() {
+    this.createDate = new Date();
+  }
+
+  @AfterUpdate()
+  afterUpdate() {
+    this.updateDate = new Date();
+  }
 }

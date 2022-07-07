@@ -1,37 +1,43 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UsersDTO } from './dto/create-user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/udpate-user.dto';
 import { User } from './entities/user.entity';
 
-// This should be a real class/interface representing a user entity
-// export type User = any;
-
 @Injectable()
-export class UsersService {
-  constructor(@InjectRepository(User) private readonly usersRepository: Repository<User>) {}
+export class UserService {
+  constructor(
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+  ) {}
 
-  create(createUserDto: UsersDTO): Promise<User> {
-    const user = new User();
-
-    user.name = createUserDto.name;
-    user.email = createUserDto.email;
-    user.password = createUserDto.password;
-
-    return this.usersRepository.save(user);
+  async create(dto: CreateUserDto) {
+    const user = this.userRepository.create(dto);
+    return this.userRepository.save(user);
   }
 
-  async findAll(): Promise<User[]> {
-    return this.usersRepository.find();
+  async find(id: string) {
+    const found = await this.findById(id);
+    return found;
   }
 
-  findOne(email: string): Promise<User> {
-    return this.usersRepository.findOne({
-      email: email,
-    });
+  async update(id: string, dto: UpdateUserDto) {
+    const found = await this.findById(id);
+    Object.assign(found, dto);
+    return this.userRepository.save(found);
   }
 
-  async remove(id: string): Promise<void> {
-    await this.usersRepository.delete(id);
+  async delete(id: string) {
+    const found = await this.findById(id);
+    return this.userRepository.remove(found);
+  }
+
+  private async findById(id: string) {
+    const found = await this.userRepository.findOne({ where: { id } });
+    if (!found) {
+      throw new NotFoundException(`User with id: ${id} was not found.`);
+    }
+    return found;
   }
 }
