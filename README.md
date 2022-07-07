@@ -1,8 +1,4 @@
-<p align="left">
-  <img src="./showcase/prime-nestjs.jpg" width="500" alt="prime-nestjs">
-</p>
-
-Production-ready and flexible NestJS Boilerplate with Typescript 🌃, Postgres 👾, TypeORM 🥷 and Docker 🐳.
+# Yellow Dolphin 🟡🐬
 
 ## Out-of-box Solutions
 
@@ -97,23 +93,6 @@ openssl rsa -in private_key.pem -outform PEM -pubout -out public_key.pem
 awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' public_key.pem
 ```
 
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for more information.
-
-<!-- ## 🌸 Built with template -->
-
 ---
 
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-
-<table>
-  <tr>
-    <td align="center"><a href="https://joeygoksu.com"><img src="https://avatars.githubusercontent.com/u/6523823?v=3?s=100" width="100px;" alt=""/><br /><sub><b>Joey Goksu</b></sub></a><br />
-    <a href="https://joeygoksu.com/aboutme" title="About me">📖</a>
-    </td>
-</table>
-
-<!-- ALL-CONTRIBUTORS-LIST:END -->
-
-Made with ♥ by <a href="https://joeygoksu.com/">Joey Göksu</a>
+Boilerplate: <a href="https://joeygoksu.com/">Joey Göksu</a>
