@@ -1,8 +1,12 @@
+import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { join } from 'path';
-import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
+import { DataSource, DataSourceOptions } from 'typeorm';
 
-export const dbConfig = (): PostgresConnectionOptions => ({
+const dbConfig = (): TypeOrmModuleOptions => ({
   type: 'postgres',
+  applicationName: 'yellow-dolphin',
+  installExtensions: true,
+  logNotifications: true,
   host: process.env.POSTGRES_HOST,
   port: parseInt(process.env.POSTGRES_PORT, 10) || 5432,
   username: process.env.POSTGRES_USER,
@@ -13,15 +17,14 @@ export const dbConfig = (): PostgresConnectionOptions => ({
   // We are using migrations, synchronize should be set to false.
   synchronize: false,
   dropSchema: false,
-  // Run migrations automatically,
-  // you can disable this if you prefer running migration manually.
   migrationsRun: true,
   logging: false,
   migrations: [join(__dirname, '../migrations/**/*{.ts,.js}')],
-  cli: {
-    migrationsDir: join(__dirname, '../migrations'),
-    entitiesDir: join(__dirname, '../**/*.entity{.ts,.js}'),
-  },
+  autoLoadEntities: true,
 });
 
-export default dbConfig();
+const dataSource = new DataSource({ ...(dbConfig() as DataSourceOptions) });
+
+// export default dbConfig();
+export default dataSource;
+export { dbConfig };
