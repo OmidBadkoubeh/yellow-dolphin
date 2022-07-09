@@ -20,5 +20,6 @@
   },
   "[typescriptreact]": {
     "editor.defaultFormatter": "vscode.typescript-language-features"
-  }
+  },
+  "cSpell.words": ["nestjs", "typeorm"]
 }
