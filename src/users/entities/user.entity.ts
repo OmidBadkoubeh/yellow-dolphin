@@ -1,4 +1,4 @@
-import { AfterInsert, AfterUpdate, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { AfterUpdate, BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 import { Gender } from '../enums/gender.enum';
 
@@ -32,9 +32,10 @@ export class User {
   @Column()
   updateDate: Date;
 
-  @AfterInsert()
-  afterInsert() {
+  @BeforeInsert()
+  beforeInsert() {
     this.createDate = new Date();
+    this.updateDate = new Date();
   }
 
   @AfterUpdate()

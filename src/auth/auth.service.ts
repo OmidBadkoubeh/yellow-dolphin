@@ -1,6 +1,6 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import * as bcryptjs from 'bcryptjs';
+import { compare, hash } from 'bcrypt';
 import { validate } from 'class-validator';
 
 import { LoggerService } from '@/logger/logger.service';
@@ -10,6 +10,8 @@ import { UsersService } from '@/users/users.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 
+const SALT_ROUNDS = 10;
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -18,63 +20,46 @@ export class AuthService {
     private userService: UsersService,
   ) {}
 
-  async login(dto: LoginDto): Promise<Record<string, any>> {
-    // Validation Flag
-    let isOk = false;
-
-    // Transform body into DTO
-    const userDTO = new CreateUserDto();
-    Object.assign(userDTO, dto);
-
-    // TODO: Refactor this section with try catch block and return error message in the catch block
-    // Validate DTO against validate function from class-validator
-    await validate(userDTO).then((errors) => {
-      if (errors.length > 0) {
-        this.logger.debug(`${errors}`);
-      } else {
-        isOk = true;
-      }
-    });
-
-    if (isOk) {
-      // Get user information
-      const userDetails = await this.userService.findByPhoneNumber(dto.phoneNumber);
-
-      // Check if user exists
-      if (userDetails === null) {
-        return { status: 401, msg: { msg: 'Invalid credentials' } };
-      }
-
-      // Check if the given password match with saved password
-      const isValid = bcryptjs.compareSync(dto.password, userDetails.password);
-      if (isValid) {
-        // Generate JWT token
-        return {
-          status: 200,
-          msg: {
-            phoneNumber: dto.phoneNumber,
-            access_token: this.jwtService.sign({ id: userDetails.id }),
-          },
-        };
-      } else {
-        // Password or email does not match
-        return { status: 401, msg: { msg: 'Invalid credentials' } };
-      }
-    } else {
-      return { status: 400, msg: { msg: 'Invalid fields.' } };
+  async login(dto: LoginDto) {
+    const found = await this.findUserByPhoneNumber(dto.phoneNumber);
+    const isPasswordCorrect = await compare(dto.password, found.password);
+    if (!isPasswordCorrect) {
+      throw new BadRequestException('Incorrect password');
     }
+    const token = this.jwtService.sign({ id: found.id });
+    return { token };
   }
 
-  async register(body: RegisterDto): Promise<Record<string, any>> {
-    // Validation Flag
+  async register(dto: RegisterDto) {
+    const existingUser = await this.userService.findByPhoneNumber(dto.phoneNumber);
+    if (existingUser) {
+      throw new BadRequestException(`User with phone number '${dto.phoneNumber}' already exists.`);
+    }
+
+    const userDto = await this.createUserDto(dto);
+    const newUser = await this.userService.create(userDto);
+    return newUser;
+  }
+
+  private async findUserByPhoneNumber(phoneNumber: string) {
+    const user = await this.userService.findByPhoneNumber(phoneNumber);
+    if (!user) {
+      throw new NotFoundException(`User with phone number '${phoneNumber}' not found.`);
+    }
+    return user;
+  }
+
+  private async createUserDto(dto: RegisterDto) {
     let isOk = false;
 
-    // Transform body into DTO
+    const hashedPassword = await hash(dto.password, SALT_ROUNDS);
     const userDTO = new CreateUserDto();
-    Object.assign(userDTO, body);
-    userDTO.password = bcryptjs.hashSync(body.password, 10);
+    userDTO.phoneNumber = dto.phoneNumber;
+    userDTO.password = hashedPassword;
+    userDTO.birthday = new Date(dto.birthday);
+    userDTO.fullName = dto.fullName;
+    userDTO.gender = dto?.gender;
 
-    // Validate DTO against validate function from class-validator
     await validate(userDTO).then((errors) => {
       if (errors.length > 0) {
         this.logger.debug(`${errors}`);
@@ -82,18 +67,11 @@ export class AuthService {
         isOk = true;
       }
     });
-    if (isOk) {
-      await this.userService.create(userDTO).catch((error) => {
-        this.logger.debug(error.message);
-        isOk = false;
-      });
-      if (isOk) {
-        return { status: 201, content: { msg: 'User created with success' } };
-      } else {
-        return { status: 400, content: { msg: 'User already exists' } };
-      }
-    } else {
-      return { status: 400, content: { msg: 'Invalid content' } };
+
+    if (!isOk) {
+      throw new BadRequestException();
     }
+
+    return userDTO;
   }
 }

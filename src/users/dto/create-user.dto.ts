@@ -1,4 +1,4 @@
-import { IsAlpha, IsDate, IsEnum, IsNotEmpty, IsPhoneNumber, MaxLength, MinLength } from 'class-validator';
+import { IsAlpha, IsDate, IsEnum, IsNotEmpty, IsPhoneNumber, IsString, Length, MaxLength, MinLength } from 'class-validator';
 
 import { Gender } from '../enums/gender.enum';
 
@@ -6,7 +6,8 @@ export class CreateUserDto {
   @IsPhoneNumber('IR')
   phoneNumber: string;
 
-  @IsAlpha()
+  @IsString()
+  @Length(4, 50)
   fullName: string;
 
   @IsDate()

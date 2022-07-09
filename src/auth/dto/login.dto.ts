@@ -1,10 +1,5 @@
-import { IsNotEmpty, IsPhoneNumber, IsString } from 'class-validator';
+import { PickType } from '@nestjs/mapped-types';
 
-export class LoginDto {
-  @IsPhoneNumber('IR')
-  phoneNumber: string;
+import { RegisterDto } from './register.dto';
 
-  @IsNotEmpty()
-  @IsString()
-  password: string;
-}
+export class LoginDto extends PickType(RegisterDto, ['phoneNumber', 'password']) {}

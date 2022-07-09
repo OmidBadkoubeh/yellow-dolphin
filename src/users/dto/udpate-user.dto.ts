@@ -1,13 +1,5 @@
-import { IsAlpha, IsEnum, IsOptional } from 'class-validator';
+import { PartialType } from '@nestjs/mapped-types';
 
-import { Gender } from '../enums/gender.enum';
+import { CreateUserDto } from './create-user.dto';
 
-export class UpdateUserDto {
-  @IsOptional()
-  @IsAlpha()
-  fullName: string;
-
-  @IsOptional()
-  @IsEnum(Gender)
-  gender: Gender;
-}
+export class UpdateUserDto extends PartialType(CreateUserDto) {}
