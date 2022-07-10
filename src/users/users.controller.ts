@@ -1,8 +1,15 @@
-import { Body, Controller, Delete, Get, Param, Patch } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, UseGuards } from '@nestjs/common';
+
+import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
+import { RolesGuard } from '@/auth/guards/roles.guard';
+import { Roles } from '@/decorators/roles.decorator';
 
 import { UpdateUserDto } from './dto/udpate-user.dto';
+import { Role } from './enums/role.enum';
 import { UsersService } from './users.service';
 
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(Role.Admin)
 @Controller('users')
 export class UsersController {
   constructor(private readonly userService: UsersService) {}

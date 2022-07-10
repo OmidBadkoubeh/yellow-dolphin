@@ -1,6 +1,7 @@
 import { AfterUpdate, BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 import { Gender } from '../enums/gender.enum';
+import { Role } from '../enums/role.enum';
 
 @Entity({ name: 'User' })
 export class User {
@@ -9,6 +10,9 @@ export class User {
 
   @Column()
   phoneNumber: string;
+
+  @Column({ nullable: true })
+  email: string;
 
   @Column()
   fullName: string;
@@ -25,6 +29,14 @@ export class User {
     default: Gender.RatherNotSay,
   })
   gender: Gender;
+
+  @Column({
+    type: 'enum',
+    array: true,
+    enum: Role,
+    default: [Role.User],
+  })
+  roles: Role[];
 
   @Column()
   createDate: Date;

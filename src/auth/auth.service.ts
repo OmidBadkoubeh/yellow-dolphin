@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { compare, hash } from 'bcrypt';
 import { validate } from 'class-validator';
@@ -8,6 +8,7 @@ import { CreateUserDto } from '@/users/dto/create-user.dto';
 import { UsersService } from '@/users/users.service';
 
 import { LoginDto } from './dto/login.dto';
+import { LoginWithEmailDto } from './dto/login-email.dto';
 import { RegisterDto } from './dto/register.dto';
 
 const SALT_ROUNDS = 10;
@@ -21,7 +22,17 @@ export class AuthService {
   ) {}
 
   async login(dto: LoginDto) {
-    const found = await this.findUserByPhoneNumber(dto.phoneNumber);
+    const found = await this.userService.findByPhoneNumber(dto.phoneNumber);
+    const isPasswordCorrect = await compare(dto.password, found.password);
+    if (!isPasswordCorrect) {
+      throw new BadRequestException('Incorrect password');
+    }
+    const token = this.jwtService.sign({ id: found.id });
+    return { token };
+  }
+
+  async loginWithEmail(dto: LoginWithEmailDto) {
+    const found = await this.userService.findByEmail(dto.email);
     const isPasswordCorrect = await compare(dto.password, found.password);
     if (!isPasswordCorrect) {
       throw new BadRequestException('Incorrect password');
@@ -41,14 +52,6 @@ export class AuthService {
     return newUser;
   }
 
-  private async findUserByPhoneNumber(phoneNumber: string) {
-    const user = await this.userService.findByPhoneNumber(phoneNumber);
-    if (!user) {
-      throw new NotFoundException(`User with phone number '${phoneNumber}' not found.`);
-    }
-    return user;
-  }
-
   private async createUserDto(dto: RegisterDto) {
     let isOk = false;
 
@@ -59,6 +62,7 @@ export class AuthService {
     userDTO.birthday = new Date(dto.birthday);
     userDTO.fullName = dto.fullName;
     userDTO.gender = dto?.gender;
+    userDTO.email = dto?.email;
 
     await validate(userDTO).then((errors) => {
       if (errors.length > 0) {

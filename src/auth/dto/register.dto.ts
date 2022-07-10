@@ -1,4 +1,4 @@
-import { IsDateString, IsEnum, IsNotEmpty, IsOptional, IsPhoneNumber, IsString, Length } from 'class-validator';
+import { IsDateString, IsEmail, IsEnum, IsNotEmpty, IsOptional, IsPhoneNumber, IsString, Length } from 'class-validator';
 
 import { Gender } from '@/users/enums/gender.enum';
 
@@ -21,4 +21,8 @@ export class RegisterDto {
   @IsOptional()
   @IsEnum(Gender)
   gender: Gender;
+
+  @IsOptional()
+  @IsEmail()
+  email: string;
 }

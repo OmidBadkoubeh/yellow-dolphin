@@ -2,9 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class AppService {
-  healthCheck(): string {
-    return JSON.stringify({
-      message: 'up',
-    });
+  healthCheck() {
+    return { message: 'OK' };
   }
 }

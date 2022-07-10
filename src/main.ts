@@ -11,10 +11,11 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
 
   const config = new DocumentBuilder()
-    .setTitle('Yellow Dolphin 🐬')
+    .setTitle('Yellow Dolphin 🟡🐬')
     .setDescription('Yellow Dolphin Swagger')
     .setVersion('1.0')
     .addTag('api')
+    .addBearerAuth(undefined, 'JWT')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
