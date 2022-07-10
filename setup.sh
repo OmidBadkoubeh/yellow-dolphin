@@ -16,11 +16,11 @@ if ! type "docker" > /dev/null 2>&1; then
     err "⛔️ Docker not installed"
 fi
 
-# Check if Docker-compose is installed
-if ! type "docker-compose" > /dev/null 2>&1; then
-    err "⛔️ Docker-Compose not installed"
+# Check if Docker Compose is installed
+if ! [ -x "$(command -v docker compose)" ]; then
+    err "⛔️ Docker Compose not installed"
 fi
-log "🍀 docker and docker-compose are installed, everything looks good."
+log "🍀 docker and docker compose are installed, everything looks good."
 
 log "↪ Copying .env.example -> .env"
 cp .env.example .env
@@ -28,10 +28,10 @@ if [ $? -ne 0 ]; then
     err "⛔️ Error while copying .env"
 fi
 
-log "🐋 Starting docker-compose stack if not already started.."
-docker-compose up -d
+log "🐋 Starting docker compose stack if not already started.."
+docker compose up -d
 if [ $? -ne 0 ]; then
-    err "⛔️ Error while starting docker-compose stack."
+    err "⛔️ Error while starting docker compose stack."
 fi
 
 log "👐 Create schemas: npm run schema:sync"
