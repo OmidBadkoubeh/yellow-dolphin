@@ -39,6 +39,7 @@ module.exports = {
     '@typescript-eslint/prefer-for-of': 'error',
     '@typescript-eslint/prefer-function-type': 'error',
     '@typescript-eslint/prefer-namespace-keyword': 'error',
+    '@typescript-eslint/no-unused-vars': ['error', { 'argsIgnorePattern': '^_' }],
     '@typescript-eslint/ban-types': [
       'error',
       {
