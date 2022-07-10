@@ -1,10 +1,10 @@
-import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 
 import { dbConfig } from './database';
 
 interface IConfig {
   port: number;
-  database: TypeOrmModuleOptions;
+  database: PostgresConnectionOptions;
   keys: {
     privateKey: string;
     publicKey: string;

@@ -23,9 +23,9 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "typeorm": "typeorm-ts-node-commonjs --",
-    "schema:sync": "npm run typeorm schema:sync -d ./src/config/database.ts",
-    "add:migration": "npm run build && npm run typeorm migration:generate -d ./src/config/database.ts -- -n",
+    "typeorm": "ts-node --transpile-only -r tsconfig-paths/register ./node_modules/typeorm/cli.js --config src/config/database.ts",
+    "schema:sync": "npm run typeorm schema:sync",
+    "add:migration": "npm run build && npm run typeorm migration:generate -- -n",
     "apply:migration": "npm run build && npm run typeorm migration:run",
     "revert:migration": "npm run build && npm run typeorm migration:revert",
     "drop:database": "npm run typeorm schema:drop"
@@ -55,7 +55,7 @@
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
     "swagger-ui-express": "^4.1.6",
-    "typeorm": "^0.3.7"
+    "typeorm": "^0.2.37"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.0.1",
