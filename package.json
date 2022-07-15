@@ -12,6 +12,7 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
+    "version": "echo $npm_package_version",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
