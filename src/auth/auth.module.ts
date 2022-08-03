@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
+import { MongooseModule } from '@nestjs/mongoose';
 import { PassportModule } from '@nestjs/passport';
-import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { LoggerModule } from '@/logger/logger.module';
-import { User } from '@/users/entities/user.entity';
+import { User, UserSchema } from '@/users/schemas/user.schema';
 import { UsersModule } from '@/users/users.module';
 
 import { AuthController } from './auth.controller';
@@ -26,7 +26,7 @@ import { JwtStrategy } from './strategy/jwt.strategy';
       inject: [ConfigService],
     }),
     UsersModule,
-    TypeOrmModule.forFeature([User]),
+    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
   ],
   providers: [AuthService, JwtStrategy],
   exports: [AuthService, JwtModule, PassportModule],
