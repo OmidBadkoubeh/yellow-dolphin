@@ -7,6 +7,7 @@ import { LoggerService } from '@/logger/logger.service';
 import { CreateUserDto } from '@/users/dto/create-user.dto';
 import { UsersService } from '@/users/users.service';
 
+import { AuthDto } from './dto/auth.dto';
 import { LoginDto } from './dto/login.dto';
 import { LoginWithEmailDto } from './dto/login-email.dto';
 import { RegisterDto } from './dto/register.dto';
@@ -21,7 +22,7 @@ export class AuthService {
     private userService: UsersService,
   ) {}
 
-  async login(dto: LoginDto) {
+  async login(dto: LoginDto): Promise<AuthDto> {
     const found = await this.userService.findByPhoneNumber(dto.phoneNumber);
     const isPasswordCorrect = await compare(dto.password, found.password);
     if (!isPasswordCorrect) {
