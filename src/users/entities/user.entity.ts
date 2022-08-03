@@ -1,4 +1,6 @@
-import { AfterUpdate, BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { AfterUpdate, BeforeInsert, Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+
+import { Flight } from '@/flights/entities/flight.entity';
 
 import { Gender } from '../enums/gender.enum';
 import { Role } from '../enums/role.enum';
@@ -43,6 +45,10 @@ export class User {
 
   @Column()
   updateDate: Date;
+
+  @Column()
+  @ManyToMany(() => Flight, (flight) => flight.bookers)
+  flights: Flight[];
 
   @BeforeInsert()
   beforeInsert() {

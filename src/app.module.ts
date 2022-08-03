@@ -10,6 +10,7 @@ import { AuthModule } from './auth/auth.module';
 import configuration from './config';
 import { TasksModule } from './tasks/tasks.module';
 import { UsersModule } from './users/users.module';
+import { FlightsModule } from './flights/flights.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { UsersModule } from './users/users.module';
     AuthModule,
     UsersModule,
     TasksModule,
+    FlightsModule,
   ],
   controllers: [AppController],
   providers: [
