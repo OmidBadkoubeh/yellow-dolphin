@@ -6,7 +6,7 @@ import { User } from '@/users/entities/user.entity';
 
 import { CreateFlightDto } from './dto/create-flight.dto';
 import { UpdateFlightDto } from './dto/update-flight.dto';
-import { Flight } from './entities/flight.entity';
+import { Flight } from './schemas/flight.schema';
 
 @Injectable()
 export class FlightsService {
