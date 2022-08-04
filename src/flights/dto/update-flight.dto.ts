@@ -1,6 +1,6 @@
 import { PartialType } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsDateString, IsOptional, IsString } from 'class-validator';
+import { IsDateString, IsNumber, IsOptional, IsString, Min } from 'class-validator';
 
 import { CreateFlightDto } from './create-flight.dto';
 
@@ -21,4 +21,9 @@ export class UpdateFlightDto extends PartialType(CreateFlightDto) {
   @IsOptional()
   @Type(() => Date)
   date?: Date;
+
+  @IsNumber({ allowInfinity: false, allowNaN: false })
+  @IsOptional()
+  @Min(1)
+  maxPassengers?: number;
 }

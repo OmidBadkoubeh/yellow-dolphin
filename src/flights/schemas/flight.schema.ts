@@ -21,8 +21,8 @@ export class Flight {
   @Prop()
   to: string;
 
-  @Prop({ type: 'decimal' })
-  passengersCount: number;
+  @Prop()
+  maxPassengers: number;
 
   @Prop({ type: [{ type: Types.ObjectId, ref: User.name }] })
   bookers: User[];

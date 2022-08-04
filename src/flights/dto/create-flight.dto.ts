@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsDate, IsNotEmpty, IsString } from 'class-validator';
+import { IsDate, IsNotEmpty, IsNumber, IsString, Min } from 'class-validator';
 
 export class CreateFlightDto {
   @IsString()
@@ -18,4 +18,8 @@ export class CreateFlightDto {
   @IsString()
   @IsNotEmpty()
   to: string;
+
+  @IsNumber({ allowInfinity: false, allowNaN: false })
+  @Min(1)
+  maxPassengers: number;
 }

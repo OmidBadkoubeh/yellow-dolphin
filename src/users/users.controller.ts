@@ -3,7 +3,7 @@ import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
 import { RolesGuard } from '@/auth/guards/roles.guard';
-import { Roles } from '@/decorators/roles.decorator';
+import { Roles } from '@/common/decorators/roles.decorator';
 
 import { UpdateUserDto } from './dto/udpate-user.dto';
 import { Role } from './enums/role.enum';
