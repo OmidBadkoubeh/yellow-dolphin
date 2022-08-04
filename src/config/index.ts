@@ -1,10 +1,10 @@
-import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
+import { MongooseModuleOptions } from '@nestjs/mongoose';
 
 import { dbConfig } from './database';
 
 interface IConfig {
   port: number;
-  database: PostgresConnectionOptions;
+  database: MongooseModuleOptions;
   keys: {
     privateKey: string;
     publicKey: string;

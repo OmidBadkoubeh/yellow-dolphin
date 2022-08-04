@@ -25,11 +25,11 @@ export class TasksService {
   }
 
   create(createTaskDto: CreateTaskDto) {
-    return 'This action adds a new task';
+    return `Task ${createTaskDto.toString()} created`;
   }
 
   findAll() {
-    return `This action returns all tasks`;
+    return 'This action returns all tasks';
   }
 
   findOne(id: number) {
@@ -37,7 +37,7 @@ export class TasksService {
   }
 
   update(id: number, updateTaskDto: UpdateTaskDto) {
-    return `This action updates a #${id} task`;
+    return `This action updates a #${id} task (${updateTaskDto.toString()})`;
   }
 
   remove(id: number) {

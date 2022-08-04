@@ -4,12 +4,14 @@ module.exports = {
     project: 'tsconfig.json',
     sourceType: 'module',
   },
-  plugins: ['@typescript-eslint/eslint-plugin', 'prettier', 'simple-import-sort'],
+  plugins: ['@typescript-eslint/eslint-plugin', 'prettier', 'simple-import-sort', 'nestjs', '@darraghor/nestjs-typed'],
   extends: [
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
     'plugin:import/recommended',
     'plugin:import/typescript',
+    'plugin:nestjs/recommended',
+    'plugin:@darraghor/nestjs-typed/recommended',
   ],
   root: true,
   env: {
@@ -26,6 +28,8 @@ module.exports = {
     semi: ['error', 'always'],
     'comma-dangle': ['error', 'always-multiline'],
 
+    'nestjs/use-validation-pipe': 'off',
+
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
@@ -39,7 +43,7 @@ module.exports = {
     '@typescript-eslint/prefer-for-of': 'error',
     '@typescript-eslint/prefer-function-type': 'error',
     '@typescript-eslint/prefer-namespace-keyword': 'error',
-    '@typescript-eslint/no-unused-vars': ['error', { 'argsIgnorePattern': '^_' }],
+    '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     '@typescript-eslint/ban-types': [
       'error',
       {
@@ -116,16 +120,16 @@ module.exports = {
     'simple-import-sort/imports': 'error',
     'simple-import-sort/exports': 'error',
   },
-  "settings": {
-    "import/parsers": {
-      "@typescript-eslint/parser": [".ts", ".tsx"]
+  settings: {
+    'import/parsers': {
+      '@typescript-eslint/parser': ['.ts', '.tsx'],
     },
-    "import/resolver": {
-      "typescript": {
+    'import/resolver': {
+      typescript: {
         // always try to resolve types under `<root>@types` directory even it doesn't contain any source code, like `@types/unist`
-        "alwaysTryTypes": true,
-        "project": "<root>/tsconfig.json"
-      }
-    }
-  }
+        alwaysTryTypes: true,
+        project: '<root>/tsconfig.json',
+      },
+    },
+  },
 };

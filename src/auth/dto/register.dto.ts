@@ -1,3 +1,4 @@
+import { Type } from 'class-transformer';
 import { IsDateString, IsEmail, IsEnum, IsNotEmpty, IsOptional, IsPhoneNumber, IsString, Length } from 'class-validator';
 
 import { Gender } from '@/users/enums/gender.enum';
@@ -16,6 +17,7 @@ export class RegisterDto {
   fullName: string;
 
   @IsDateString()
+  @Type(() => String)
   birthday: Date;
 
   @IsOptional()

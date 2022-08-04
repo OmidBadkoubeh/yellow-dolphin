@@ -1,28 +1,9 @@
-import { join } from 'path';
-import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
+import { MongooseModuleOptions } from '@nestjs/mongoose';
 
-export const dbConfig = (): PostgresConnectionOptions => ({
-  type: 'postgres',
-  applicationName: 'yellow-dolphin',
-  installExtensions: true,
-  logNotifications: true,
-  host: process.env.POSTGRES_HOST,
-  port: parseInt(process.env.POSTGRES_PORT, 10) || 5432,
-  username: process.env.POSTGRES_USER,
-  password: process.env.POSTGRES_PASSWORD,
-  database: process.env.POSTGRES_DB,
-  ssl: false,
-  // We are using migrations, synchronize should be set to false.
-  synchronize: false,
-  dropSchema: false,
-  migrationsRun: true,
-  logging: false,
-  migrations: [join(__dirname, '../migrations/**/*{.ts,.js}')],
-  entities: [join(__dirname, '../**/*.entity{.ts,.js}')],
-  cli: {
-    migrationsDir: join(__dirname, '../migrations/'),
-    entitiesDir: join(__dirname, '../**/*.entity{.ts,.js}'),
-  },
+export const dbConfig = (): MongooseModuleOptions => ({
+  appName: process.env.APP_NAME,
+  dbName: process.env.DB_NAME,
+  uri: process.env.MONGO_URI,
 });
 
 export default dbConfig();
