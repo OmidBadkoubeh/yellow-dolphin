@@ -4,12 +4,13 @@ module.exports = {
     project: 'tsconfig.json',
     sourceType: 'module',
   },
-  plugins: ['@typescript-eslint/eslint-plugin', 'prettier', 'simple-import-sort', '@darraghor/nestjs-typed'],
+  plugins: ['@typescript-eslint/eslint-plugin', 'prettier', 'simple-import-sort', 'nestjs', '@darraghor/nestjs-typed'],
   extends: [
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
     'plugin:import/recommended',
     'plugin:import/typescript',
+    'plugin:nestjs/recommended',
     'plugin:@darraghor/nestjs-typed/recommended',
   ],
   root: true,
@@ -26,6 +27,8 @@ module.exports = {
     'linebreak-style': ['error', 'unix'],
     semi: ['error', 'always'],
     'comma-dangle': ['error', 'always-multiline'],
+
+    'nestjs/use-validation-pipe': 'off',
 
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',

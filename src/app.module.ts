@@ -34,6 +34,7 @@ import { UsersModule } from './users/users.module';
       provide: APP_PIPE,
       useValue: new ValidationPipe({
         whitelist: true,
+        forbidUnknownValues: true,
       }),
     },
   ],
