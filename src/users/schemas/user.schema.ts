@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Types } from 'mongoose';
+import { Document, Types } from 'mongoose';
 
 import { Gender } from '../enums/gender.enum';
 import { Role } from '../enums/role.enum';
@@ -8,6 +8,8 @@ export type UserDocument = User & Document;
 
 @Schema()
 export class User {
+  _id: Types.ObjectId;
+
   @Prop()
   phoneNumber: string;
 

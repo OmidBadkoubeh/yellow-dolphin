@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { MongooseModule } from '@nestjs/mongoose';
 
 import { FlightsController } from './flights.controller';
 import { FlightsService } from './flights.service';
-import { Flight } from './schemas/flight.schema';
+import { Flight, FlightSchema } from './schemas/flight.schema';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Flight])],
+  imports: [MongooseModule.forFeature([{ name: Flight.name, schema: FlightSchema }])],
   controllers: [FlightsController],
   providers: [FlightsService],
 })

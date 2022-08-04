@@ -1,27 +1,31 @@
-import { Column, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document, Types } from 'mongoose';
 
-import { User } from '@/users/entities/user.entity';
+import { User } from '@/users/schemas/user.schema';
 
+export type FlightDocument = Flight & Document;
+
+@Schema()
 export class Flight {
-  @PrimaryGeneratedColumn()
-  id: string;
+  _id: Types.ObjectId;
 
-  @Column()
+  @Prop()
   name: string;
 
-  @Column('datetime')
+  @Prop()
   date: Date;
 
-  @Column()
+  @Prop()
   from: string;
 
-  @Column()
+  @Prop()
   to: string;
 
-  @Column({ type: 'decimal' })
+  @Prop({ type: 'decimal' })
   passengersCount: number;
 
-  @Column()
-  @ManyToMany(() => User, (user) => user.flights)
+  @Prop({ type: [{ type: Types.ObjectId, ref: User.name }] })
   bookers: User[];
 }
+
+export const FlightSchema = SchemaFactory.createForClass(Flight);
