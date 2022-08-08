@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Transform } from 'class-transformer';
 import { Document, Types } from 'mongoose';
 
 import { User } from '@/users/schemas/user.schema';
@@ -7,24 +8,46 @@ export type FlightDocument = Flight & Document;
 
 @Schema()
 export class Flight {
-  _id: Types.ObjectId;
+  /**
+   * @description Flight id
+   */
+  @Transform(({ value }) => value.toString())
+  _id: string;
 
-  @Prop()
+  /**
+   * @description Flight name
+   */
+  @Prop({ required: true })
   name: string;
 
-  @Prop()
+  /**
+   * @description Flight date
+   */
+  @Prop({ required: true })
   date: Date;
 
-  @Prop()
+  /**
+   * @description Flight starting city
+   */
+  @Prop({ required: true })
   from: string;
 
-  @Prop()
+  /**
+   * @description Flight destination city
+   */
+  @Prop({ required: true })
   to: string;
 
-  @Prop()
+  /**
+   * @description Flight max passengers
+   */
+  @Prop({ required: true, default: 1 })
   maxPassengers: number;
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: User.name }] })
+  /**
+   * @description Flight bookers
+   */
+  @Prop({ type: [{ type: Types.ObjectId, ref: User.name, default: [] }] })
   bookers: User[];
 }
 

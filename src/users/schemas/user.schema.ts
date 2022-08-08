@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Transform } from 'class-transformer';
 import { Document, Types } from 'mongoose';
 
 import { Gender } from '../enums/gender.enum';
@@ -8,12 +9,13 @@ export type UserDocument = User & Document;
 
 @Schema()
 export class User {
-  _id: Types.ObjectId;
+  @Transform(({ value }) => value.toString())
+  _id: string;
 
-  @Prop()
+  @Prop({ unique: true })
   phoneNumber: string;
 
-  @Prop()
+  @Prop({ unique: true })
   email: string;
 
   @Prop()

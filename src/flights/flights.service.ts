@@ -1,6 +1,6 @@
 import { HttpException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
 
 import { LoggerService } from '@/logger/logger.service';
 import { User } from '@/users/schemas/user.schema';
@@ -18,7 +18,7 @@ export class FlightsService {
 
   async create(createFlightDto: CreateFlightDto) {
     const newFlight = await this.flightModel.create(createFlightDto);
-    return newFlight;
+    return await newFlight.save();
   }
 
   async findAll() {
@@ -33,42 +33,41 @@ export class FlightsService {
 
   async update(id: string, updateFlightDto: UpdateFlightDto) {
     const found = await this.flightModel.findByIdAndUpdate(id, updateFlightDto, { overwrite: true });
-    return found;
+    return await found.save();
   }
 
   async remove(id: string) {
-    const found = await this.flightModel.findOneAndDelete().where('id').equals(id);
-    return found;
+    const found = await this.flightModel.findOneAndDelete({ _id: id });
+    return await found.save();
   }
 
   async bookFlight(id: string, user: User) {
-    const found = await this.findById(id);
-    const flight = await found.populate('bookers');
+    const flight = await this.findById(id);
 
-    if (flight.bookers.length >= flight.maxPassengers) {
+    const flightBookers = flight.bookers as unknown as string[];
+
+    if (flightBookers.length >= flight.maxPassengers) {
       throw new HttpException('Flight is full', 400);
     }
 
-    if (flight.bookers.findIndex((b) => b._id.toString() === user._id.toString()) !== -1) {
+    if (flightBookers.includes(user._id)) {
       throw new HttpException('You already booked this flight', 400);
     }
 
-    flight.bookers.push(user);
-    const updated = await this.flightModel.findByIdAndUpdate(id, flight, { overwrite: true });
-    return await updated.save();
+    flightBookers.push(user._id);
+    flight.bookers = flightBookers as unknown as User[];
+    return await flight.save();
   }
 
-  async cancelFlight(flightId: string, userId: string) {
+  async cancelFlight(flightId: string, user: User) {
     const flight = await this.findById(flightId);
-    await flight.populate('bookers');
-    const filteredFlights = flight.bookers.filter((b) => b._id !== new Types.ObjectId(userId));
-    await flight.set('bookers', filteredFlights).save();
-    return flight;
+    await flight.populate({ path: 'bookers', select: '_id' });
+    flight.bookers = flight.bookers.filter((booker) => booker._id !== user._id);
+    return await flight.save();
   }
 
   private async findById(id: string) {
     const found = await this.flightModel.findOne().where('_id').equals(id);
-    this.logger.log(found);
     if (!found) {
       throw new NotFoundException(`Flight with id: ${id} was not found.`);
     }

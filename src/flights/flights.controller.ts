@@ -35,7 +35,7 @@ export class FlightsController {
     return this.flightsService.bookFlight(id, user);
   }
 
-  @ApiResponse({ status: 200, type: Flight })
+  @ApiResponse({ status: 201, type: Flight })
   @UseGuards(AdminGuard)
   @Post()
   create(@Body() createFlightDto: CreateFlightDto) {
