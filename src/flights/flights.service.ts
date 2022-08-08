@@ -50,24 +50,24 @@ export class FlightsService {
       throw new HttpException('Flight is full', 400);
     }
 
-    if (flightBookers.includes(user._id)) {
+    if (flightBookers.includes(user.id)) {
       throw new HttpException('You already booked this flight', 400);
     }
 
-    flightBookers.push(user._id);
+    flightBookers.push(user.id);
     flight.bookers = flightBookers as unknown as User[];
     return await flight.save();
   }
 
   async cancelFlight(flightId: string, user: User) {
     const flight = await this.findById(flightId);
-    await flight.populate({ path: 'bookers', select: '_id' });
-    flight.bookers = flight.bookers.filter((booker) => booker._id !== user._id);
+    await flight.populate({ path: 'bookers', select: 'id' });
+    flight.bookers = flight.bookers.filter((booker) => booker.id !== user.id);
     return await flight.save();
   }
 
   private async findById(id: string) {
-    const found = await this.flightModel.findOne().where('_id').equals(id);
+    const found = await this.flightModel.findOne({ _id: id });
     if (!found) {
       throw new NotFoundException(`Flight with id: ${id} was not found.`);
     }

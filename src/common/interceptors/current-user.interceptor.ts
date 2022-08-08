@@ -9,10 +9,10 @@ export class CurrentUserInterceptor implements NestInterceptor {
 
   async intercept(context: ExecutionContext, handler: CallHandler) {
     const request = context.switchToHttp().getRequest<RequestType>();
-    const { _id } = request.user || {};
+    const { id } = request.user || {};
 
-    if (_id) {
-      const user = await this.usersService.find(_id.toString());
+    if (id) {
+      const user = await this.usersService.find(id.toString());
       request.user = user;
     }
 

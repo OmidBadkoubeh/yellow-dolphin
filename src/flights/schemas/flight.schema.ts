@@ -1,5 +1,4 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Transform } from 'class-transformer';
 import { Document, Types } from 'mongoose';
 
 import { User } from '@/users/schemas/user.schema';
@@ -11,8 +10,7 @@ export class Flight {
   /**
    * @description Flight id
    */
-  @Transform(({ value }) => value.toString())
-  _id: string;
+  id: string;
 
   /**
    * @description Flight name

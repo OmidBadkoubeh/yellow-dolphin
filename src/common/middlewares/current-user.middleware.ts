@@ -13,10 +13,10 @@ export class CurrentUserMiddleware implements NestMiddleware {
   ) {}
 
   async use(request: RequestType, response: Response, next: NextFunction) {
-    const { _id } = request.user || {};
+    const { id } = request.user || {};
 
-    if (_id) {
-      const user = await this.usersService.find(_id.toString());
+    if (id) {
+      const user = await this.usersService.find(id.toString());
       request.user = user;
     }
 
