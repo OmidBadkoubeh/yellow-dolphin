@@ -1,0 +1,30 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Project wide type checking with TypeScript",
+      "type": "npm",
+      "script": "type-check",
+      "problemMatcher": ["$tsc"],
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "presentation": {
+        "clear": true,
+        "reveal": "never",
+        "revealProblems": "onProblem"
+      }
+    },
+    {
+      "label": "Build docker image and push to registry",
+      "type": "shell",
+      "command": "./scripts/docker-build-push.sh",
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    }
+  ]
+}
